@@ -67,6 +67,7 @@ class StudentRegistrationView( LoginRequiredMixin, FormView):
     success_url = '/register/cirstaff/success'
 
     def form_valid(self, form):
+        form.instance.aums_id = form.instance.aums_id.lower()
         form.save()
         return FormView.form_valid(self, form)
 
@@ -84,7 +85,7 @@ def handle_student_upload(request):
             studentFields = filehandle.get_array()[1:]
             counter = 0
             for student in studentFields:
-                Student.Objects.create_student_fromfile(student[0],student[1],student[2],student[3],student[4], student[5],
+                Student.Objects.create_student_fromfile(student[0].lower(),student[1],student[2],student[3],student[4], student[5],
                                                         student[6],student[7],student[8],student[9],student[10],student[11],student[12],student[13],student[14])
                 counter = counter+1
 
@@ -103,14 +104,14 @@ class StudentListView(LoginRequiredMixin,ListView):
         return Student.Objects.all()
 
 
-class StudentListUpdateView(LoginRequiredMixin, UpdateView):
+class StudentListUpdateView(UpdateView):
     model = Student
-    form_class = StudentRegistrationForm
+    fields = student_fields
     template_name_suffix = '_update_form'
     success_url = '/register/cirstaff/success/'
 
     def get_object(self, queryset=None):
-        obj = Student.Objects.get(stud_id=self.kwargs['stud_id'])
+        obj = Student.Objects.get(aums_id=self.kwargs['aums_id'])
         if obj:
             return obj
         else:

@@ -31,8 +31,7 @@ class User(AbstractBaseUser):
     Extends the default User profiles of Django. The fields of this model can be obtained by the
     user.get_profile method and it's extended by the django-profile application.
     """
-    user_id = models.AutoField(primary_key=True)
-    aums_id = models.CharField(_('Aums ID'),  max_length=32, blank=False, unique=True)
+    aums_id = models.CharField(_('Aums ID'),  max_length=32, blank=False, primary_key=True)
     first_name = models.CharField(_('First Name'), max_length=32, blank=True, null=True,
                                   validators=[RegexValidator(regex='^[A-Za-z]*$')])
     last_name = models.CharField(_('Last Name'), max_length=32, blank=True, null=True,
